@@ -1,16 +1,29 @@
-let btn = document.querySelector("button");
-let URL = "https://api.funtranslations.com/translate/dothraki.json";
-let textArea = document.querySelector("#textInput");
-let opDiv = document.querySelector("#textOutput");
+let btn = document.querySelector("#textButton");
 
-function getURL(){
-    return URL + "?" + "text=";
+let textInput = document.querySelector("#textInput");
+
+let textOutput = document.querySelector("#textOutput");
+
+let URL = "https://api.funtranslations.com/translate/dothraki.json";
+
+function getURL(text){
+    return URL + "?" + "text=" + text;
 }
 
-btn.addEventListener("click",()=>{
-    console.log("Clicked");
-    opDiv.innerText = textArea.value;
-    console.log(opDiv.innerText);
-    console.log(getURL());
-})
+function errHandler(error){
+    console.log("Error :",error);
+    console.log("Some server problem");
+};
 
+function clickHandler(){
+    console.log("Clicked");
+    let text = textInput.value;
+    
+    fetch(getURL(text))
+    .then(response => response.json())
+    .then(json => textOutput.innerText = json.contents.translated)
+    .catch((error)=>console.log("Server error"))
+}
+
+
+btn.addEventListener("click", clickHandler);
